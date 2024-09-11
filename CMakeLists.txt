@@ -7,14 +7,9 @@ endif()
 
 project ("network-dev")
 
-if(WIN32)
-	set(COMMON_DEPENDENCIES wsock32 ws2_32)
-else()
-	set(COMMON_DEPENDENCIES "")
-endif()
-
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../dist/lib/${CMAKE_SYSTEM_PROCESSOR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../dist/lib/${CMAKE_SYSTEM_PROCESSOR})
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/../dist/bin/${CMAKE_SYSTEM_PROCESSOR})
 
-add_subdirectory("ns-lookup")
+add_subdirectory("libs")
+add_subdirectory("apps")

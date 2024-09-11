@@ -28,7 +28,7 @@ int start(int argc, char** argv)
 	}
 	else
 	{
-		printf("Enter dns name:");
+		printf("Enter DNS name:");
 		int ret = scanf("%s", name);
 		if (ret < 1)
 		{
@@ -50,7 +50,7 @@ int resolve_dns(const char* name)
 
 	printf("Resolved: %s\n", he->h_name);
 
-	printf("IPv4 addres list\n");
+	printf("IPv4 address list: \n");
 
 	struct in_addr** addr_list = (struct in_addr**)he->h_addr_list;
 	int i;
