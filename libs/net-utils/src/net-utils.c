@@ -42,6 +42,11 @@ int combine_arg_line(char* dest, const char* argv[], int start, int count)
 	for (int i = start; i < count; ++i)
 	{
 		strcat(dest, argv[i]);
+
+		if (i < count - 1)
+		{
+			strcat(dest, " ");
+		}
 	}
 
 	return 0;
