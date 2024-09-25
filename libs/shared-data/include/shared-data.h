@@ -11,9 +11,31 @@ enum SquareRootResult { NO_ROOT, ONE_ROOT, TWO_ROOT };
 
 struct SquareRootData
 {
-	enum quareRootResult result;
+	enum SquareRootResult result;
 
 	double x1;
 
 	double x2;
+};
+
+enum NumberOperationType { AVG, MIN, MAX };
+
+struct NumberOperationData
+
+{
+	enum NumberOperationType type;
+
+	int count;
+
+	double data [1024];
+
+};
+
+struct NumberOperationResult
+
+{
+	enum NumberOperationType type;
+
+	double result;
+
 };
