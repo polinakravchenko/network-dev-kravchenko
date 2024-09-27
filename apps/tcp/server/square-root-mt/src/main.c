@@ -93,7 +93,6 @@ int process_connections()
 	return 0;
 }
 
-
 void process_connection(void* arg)
 {
 	SOCKET client_socket = (SOCKET)arg;
@@ -112,9 +111,10 @@ void process_connection(void* arg)
 
 	printf("Establish connection from: %s\n", inet_ntoa(client_addr.sin_addr));
 
+	// client loop
 	while (1)
 	{
-		struct NumberOperationData request;
+		struct QuadraticEquation request;
 
 		int ret = recv(client_socket, (char*)&request, sizeof(request), 0);
 
@@ -126,7 +126,7 @@ void process_connection(void* arg)
 
 		printf("<==== Received: [%d bytes]\n", ret);
 
-		struct NumberOperationResult response;
+		struct SquareRootData response;
 
 		process_request(&request, &response);
 
@@ -145,62 +145,47 @@ void process_connection(void* arg)
 	{
 		return closesocket(client_socket);
 	}
-
 }
 
-int process_request(struct NumberOperationData* request, struct NumberOperationResult* response)
+int process_request(struct QuadraticEquation* request, struct SquareRootData* response)
 {
-	response->type = request->type;
+	double a = request->a, b = request->b, c = request->c;
 
-	switch (request->type)
+	char bc = '+';
+	if (b < 0)
 	{
-	case AVG:
-		response->result = avg_of(request->data);
-		break;
-	case MAX:
-		response->result = max_of(request->data);
-		break;
-	case MIN:
-		response->result = min_of(request->data);
-		break;
-	default:
-		break;
+		bc = '\0';
 	}
+
+	char cc = '+';
+	if (c < 0)
+	{
+		cc = '\0';
+	}
+
+	printf("Equastion %.5f*x^2%c%.5f*x%c%.5f=0\n", a, bc, b, cc, c);
+
+	double D = b * b - 4 * a * c;
+
+	if (D < 0)
+	{
+		response->result = NO_ROOT;
+		return 0;
+	}
+
+	response->x1 = (-b - sqrt(D)) / 2 / a;
+
+	response->x2 = (-b + sqrt(D)) / 2 / a;
+
+	if (fabs(response->x1 - response->x2) < 1e-9)
+	{
+		response->result = ONE_ROOT;
+	}
+	else {
+		response->result = TWO_ROOT;
+	}
+
+	printf("Results: x1=%.3f, x2=%.3f\n", response->x1, response->x2);
 
 	return 0;
-}
-
-double avg_of(double* data) {
-	double sum = 0;
-	int count = 0;
-
-	for (; !isnan(data[count]); ++count)
-	{
-		sum += data[count];
-	}
-	return sum / count;
-}
-
-double max_of(double* data) {
-	double max = NAN;
-
-	for (int i = 0; !isnan(data[i]); ++i)
-	{
-		if (isnan(max) || max < data[i]) {
-			max = data[i];
-		}
-	}
-	return max;
-}
-
-double min_of(double* data) {
-	double min = NAN;
-
-	for (int i = 0; !isnan(data[i]); ++i)
-	{
-		if (isnan(min) || min > data[i]) {
-			min = data[i];
-		}
-	}
-	return min;
 }
