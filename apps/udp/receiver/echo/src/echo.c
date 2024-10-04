@@ -41,7 +41,7 @@ int start(int argc, char* argv[])
 
 int init_client(short port, int queue_size)
 {
-	server_socket = socket(AF_INET, SOCK_DGRAM, 0);  // Використання SOCK_DGRAM для UDP
+	server_socket = socket(AF_INET, SOCK_DGRAM, 0);
 
 	if (server_socket <= 0)
 	{
@@ -51,10 +51,9 @@ int init_client(short port, int queue_size)
 
 	struct sockaddr_in server_address;
 	server_address.sin_family = AF_INET;
-	server_address.sin_addr.s_addr = INADDR_ANY;  // Приймати запити з будь-якої IP-адреси
+	server_address.sin_addr.s_addr = INADDR_ANY;
 	server_address.sin_port = htons(port);
 
-	// Прив'язуємо сокет до адреси і порту
 	if (bind(server_socket, (struct sockaddr*)&server_address, sizeof(server_address)) < 0) {
 		printf("Cannot bind socket to port %d\n", port);
 		return -2;
@@ -75,7 +74,6 @@ int process_connection()
 	{
 		memset(buffer, 0, sizeof(buffer));
 
-		// Отримуємо повідомлення від клієнта
 		int ret = recvfrom(server_socket, buffer, sizeof(buffer), 0, (struct sockaddr*)&client_addr, &len);
 
 		if (ret <= 0)
@@ -87,7 +85,6 @@ int process_connection()
 		printf("Establish connection from: %s\n", inet_ntoa(client_addr.sin_addr));
 		printf("<==== Received: %s [%d bytes]\n", buffer, ret);
 
-		// Відправляємо отримане повідомлення назад клієнту (відправляємо echo)
 		ret = sendto(server_socket, buffer, ret, 0, (struct sockaddr*)&client_addr, len);
 
 		if (ret <= 0)

@@ -37,7 +37,7 @@ int start(int argc, char* argv[])
 
 int init_client(const char* host, short port)
 {
-    SOCKET client_socket = socket(AF_INET, SOCK_DGRAM, 0);  // SOCK_DGRAM для UDP
+    SOCKET client_socket = socket(AF_INET, SOCK_DGRAM, 0);
     if (client_socket <= 0)
     {
         printf("Cannot create client socket\n");
